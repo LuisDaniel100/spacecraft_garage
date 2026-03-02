@@ -7,13 +7,8 @@ if (!isset($_SESSION['usuario_id'])) {
 }
 
 require "php/config.php";
+require "php/filter_spacecraft.php";  // Asumiendo que esta es la parte de la consulta SQL
 
-$sql = "SELECT * FROM naves";
-$resultado = $conn->query($sql);
-
-if (!$resultado) {
-    die("Error en la consulta: " . $conn->error);
-}
 ?>
 
 <!DOCTYPE html>
@@ -35,6 +30,7 @@ if (!$resultado) {
     <div class="dashboard-actions">
         <a href="create_spacecraft.php">Crear Nave</a>
         <a href="php/logout.php">Cerrar Sesión</a>
+
     </div>
 
     <!-- Tabla de naves -->
