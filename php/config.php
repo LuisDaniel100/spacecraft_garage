@@ -1,9 +1,10 @@
 <?php
 
-$host = "localhost";
-$user = "root";
-$password = "";
-$database = "spacecraft_app";
+$host = "srv1349.hstgr.io";
+$database = "u529436459_luis";
+$user = "u529436459_luis";
+$password = "a^!N6Ec#"; 
+
 
 $conn = new mysqli($host, $user, $password, $database);
 
