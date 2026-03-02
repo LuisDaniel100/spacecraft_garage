@@ -1,7 +1,6 @@
 <?php
 session_start();
 
-// Verificar sesión
 if (!isset($_SESSION['usuario_id'])) {
     header("Location: index.php");
     exit;
@@ -9,62 +8,74 @@ if (!isset($_SESSION['usuario_id'])) {
 
 require "php/config.php";
 
-// Buscar naves si hay query de búsqueda
-$busqueda = $_GET['busqueda'] ?? '';
-$sql = "SELECT * FROM naves WHERE usuario_id = ? AND nombre LIKE ?";
-$stmt = $conn->prepare($sql);
-$likeBusqueda = "%$busqueda%";
-$stmt->bind_param("is", $_SESSION['usuario_id'], $likeBusqueda);
-$stmt->execute();
-$resultado = $stmt->get_result();
+$sql = "SELECT * FROM naves";
+$resultado = $conn->query($sql);
+
+if (!$resultado) {
+    die("Error en la consulta: " . $conn->error);
+}
 ?>
 
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Panel - Naves</title>
+    <title>Naves</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
-<body>
 
-<h2>Bienvenido, <?= htmlspecialchars($_SESSION['usuario_nombre'] ?? 'Usuario') ?></h2>
+<body class="dashboard">
 
-<!-- Buscador por nombre -->
-<form method="GET">
-    <input type="text" name="busqueda" placeholder="Buscar por nombre" value="<?= htmlspecialchars($busqueda) ?>">
-    <button type="submit">Buscar</button>
-</form>
+<header class="top-header">
+    <h1>Bienvenido, <?= htmlspecialchars($_SESSION['usuario_nombre'] ?? 'Usuario') ?> </h1>
+</header>
 
-<!-- Botones -->
-<a href="crear_nave.php">Crear Nueva Nave</a> |
-<a href="php/logout.php">Cerrar Sesión</a>
+<div class="dashboard-container">
+    <!-- Botones de acción -->
+    <div class="dashboard-actions">
+        <a href="create_spacecraft.php">Crear Nave</a>
+        <a href="php/logout.php">Cerrar Sesión</a>
+    </div>
 
-<!-- Tabla de naves -->
-<table border="1" cellpadding="5" cellspacing="0">
-    <tr>
-        <th>Nombre</th>
-        <th>Nacionalidad</th>
-        <th>Año</th>
-        <th>Foto</th>
-        <th>Vista</th>
-    </tr>
-    <?php while ($fila = $resultado->fetch_assoc()): ?>
-    <tr>
-        <td><?= htmlspecialchars($fila['nombre']) ?></td>
-        <td><?= htmlspecialchars($fila['nacionalidad']) ?></td>
-        <td><?= htmlspecialchars($fila['anio_construccion']) ?></td>
-        <td>
-            <?php if ($fila['foto']): ?>
-                <img src="uploads/<?= htmlspecialchars($fila['foto']) ?>" width="50" alt="Foto de la nave">
+    <!-- Tabla de naves -->
+    <table class="dashboard-table">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Nacionalidad</th>
+                <th>Año</th>
+                <th>Foto</th>
+                <th>Vista</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php if ($resultado->num_rows > 0): ?>
+                <?php while ($fila = $resultado->fetch_assoc()): ?>
+                    <tr>
+                        <td><?= htmlspecialchars($fila['nombre']) ?></td>
+                        <td><?= htmlspecialchars($fila['nacionalidad']) ?></td>
+                        <td><?= htmlspecialchars($fila['anio_construccion']) ?></td>
+                        <td>
+                            <?php if (!empty($fila['foto'])): ?>
+                                <img src="uploads/<?= htmlspecialchars($fila['foto']) ?>" width="50" alt="Foto">
+                            <?php else: ?>
+                                Sin imagen
+                            <?php endif; ?>
+                        </td>
+                        <td>
+                           <a href="javascript:void(0);">Ver / Editar</a>
+                        </td>
+                    </tr>
+                <?php endwhile; ?>
+            <?php else: ?>
+                <tr>
+                    <td colspan="5">No hay naves registradas.</td>
+                </tr>
             <?php endif; ?>
-        </td>
-        <td>
-            <a href="vehicle_overview.php?id=<?= $fila['id'] ?>">Ver / Editar</a>
-        </td>
-    </tr>
-    <?php endwhile; ?>
-</table>
+        </tbody>
+    </table>
+
+</div>
 
 </body>
 </html>

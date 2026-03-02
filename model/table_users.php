@@ -1,9 +1,9 @@
 <?php
 
-$host = "srv1349.hstgr.io";
-$dbname = "u529436459_luis";
+$host = "";
+$dbname = "";
 $user = "u529436459_luis";
-$pass = "a^!N6Ec#"; 
+$pass = ""; 
 
 
 $conn = new mysqli($host, $user, $pass, $dbname);

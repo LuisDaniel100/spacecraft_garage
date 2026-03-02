@@ -1,60 +1,67 @@
-<?php 
-session_start(); 
+<?php
+session_start();
 
-// Si ya está logueado, lo mandamos al dashboard
 if (isset($_SESSION["usuario_id"])) {
     header("Location: dashboard.php");
     exit;
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
-    <meta charset="utf-8">
-    <title>Spacecraft</title>
+    <meta charset="UTF-8">
+    <title>Autenticación</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
 
 <body>
 
-<div id="tarjeta_login">
+<?php if (isset($_GET['registro']) && $_GET['registro'] === 'exito'): ?>
+    <div class="mensaje_exito">
+        Cuenta creada con éxito. Ahora puedes iniciar sesión.
+    </div>
+<?php endif; ?>
 
-    <!-- FORMULARIO LOGIN -->
-    <form id="form_login" class="formulario_autenticacion activo" method="POST" action="php/login.php">
+<?php if (isset($_GET['registro']) && $_GET['registro'] === 'error'): ?>
+    <div class="mensaje_error">
+         Ocurrió un error al registrar. Intenta nuevamente.
+    </div>
+<?php endif; ?>
 
-        <h3>Bienvenido</h3>
+<!-- FORMULARIO LOGIN -->
+<form id="form_login" method="POST" action="php/login.php">
+    <h3>Iniciar Sesión</h3>
 
-        <input type="email" name="correo" placeholder="Correo electrónico" required>
-        <input type="password" name="contrasena" placeholder="Contraseña" required>
+    <input type="email" name="correo" placeholder="Correo electrónico" required>
+    <input type="password" name="contrasena" placeholder="Contraseña" required>
 
-        <button type="submit">Iniciar Sesión</button>
+    <button type="submit">Entrar</button>
 
-        <p>
-            ¿No tienes cuenta?
-            <span id="mostrar_registro" class="enlace">Registrarse</span>
-        </p>
+    <p>
+        ¿No tienes cuenta?
+        <span id="mostrar_registro">Regístrate</span>
+    </p>
+</form>
 
-    </form>
+<!-- FORMULARIO REGISTRO -->
+<form id="form_registro" method="POST" action="php/register.php" style="display:none;">
+    <h3>Crear Cuenta</h3>
 
-    <!-- FORMULARIO REGISTRO -->
-    <form id="form_registro" class="formulario_autenticacion" method="POST" action="php/register.php">
+    <input type="text" name="nombre" placeholder="Nombre completo" required>
+    <input type="email" name="correo" placeholder="Correo electrónico" required>
+    <input type="password" name="contrasena" placeholder="Contraseña" required minlength="8">
+    <input type="password" name="confirmar_contrasena" placeholder="Confirmar Contraseña" required>
 
-        <h3>Crear Cuenta</h3>
+    <button type="submit">Registrarse</button>
 
-        <input type="text" name="nombre" placeholder="Nombre completo" required>
-        <input type="email" name="correo" placeholder="Correo electrónico" required>
-        <input type="password" name="contrasena" placeholder="Contraseña" required minlength="8">
-        <input type="password" name="confirmar_contrasena" placeholder="Confirmar Contraseña" required>
-
-        <button type="submit">Crear Cuenta</button>
-
-        <button type="button" id="mostrar_login" class="boton">Iniciar Sesión</button>
-
-    </form>
-
-</div>
+    <p>
+        ¿Ya tienes cuenta?
+        <span id="mostrar_login">Inicia sesión</span>
+    </p>
+</form>
 
 <script src="js/logic.js"></script>
+
 </body>
 </html>

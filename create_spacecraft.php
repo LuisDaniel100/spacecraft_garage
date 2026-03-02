@@ -9,14 +9,16 @@ if(!isset($_SESSION['usuario_id'])){
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Crear Nueva Nave Espacial</title>
+    <title>Crear Nave </title>
     <link rel="stylesheet" href="css/style.css">
 </head>
-<body>
+<body class="dashboard">
 
-<h2>Crear Nueva Nave Espacial</h2>
+<header class="top-header">
+    <h1>Crear Nueva Nave</h1>
+</header>
 
-<form method="POST" action="php/create_spacecraft.php" enctype="multipart/form-data">
+<form class="space-form" method="POST" action="php/spacecraft_action.php" enctype="multipart/form-data">
     <label>Nombre de la Nave:</label>
     <input type="text" name="nombre" placeholder="Nombre de la Nave" required>
 
@@ -24,15 +26,17 @@ if(!isset($_SESSION['usuario_id'])){
     <input type="text" name="nacionalidad" placeholder="Nacionalidad" required>
 
     <label>Año de Construcción:</label>
-    <input type="number" name="anio_construccion" placeholder="Año de Construcción" min="1900" max="<?= date('Y') ?>" required>
+    <input type="number" name="anio_construccion"
+           placeholder="Año de Construcción"
+           min="1900"
+           max="<?= date('Y') ?>"
+           required>
 
     <label>Foto (opcional):</label>
     <input type="file" name="foto" accept="image/*">
 
     <button type="submit">Crear Nave</button>
 </form>
-
-<a href="dashboard.php">Volver al Panel</a>
 
 </body>
 </html>
