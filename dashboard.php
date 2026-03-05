@@ -7,7 +7,7 @@ if (!isset($_SESSION['usuario_id'])) {
 }
 
 require "php/config.php";
-require "php/filter_spacecraft.php";  // Asumiendo que esta es la parte de la consulta SQL
+require "php/filter_spacecraft.php";  
 
 ?>
 
